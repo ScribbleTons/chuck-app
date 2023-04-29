@@ -11,14 +11,14 @@ interface ChuckState {
         icon_url: string;
         id: string;
     }>
-    error:any
+    error: any
 }
 
 // Define the initial state using that type
 const initialState: ChuckState = {
     loading: false,
     jokes: [],
-    error:null
+    error: null
 }
 
 export const chuckSlice = createSlice({
@@ -29,16 +29,13 @@ export const chuckSlice = createSlice({
 
     },
     extraReducers(builder) {
-        builder.addMatcher(chuckApi.endpoints.getRandomJokes.matchPending, (state) => {
-            state.loading = true
-        }).addMatcher(chuckApi.endpoints.getJokesByCategory.matchPending, (state) => {
+        builder.addMatcher(chuckApi.endpoints.getJokesByCategory.matchPending, (state) => {
             state.loading = true
         }).addMatcher(chuckApi.endpoints.getSearchJokes.matchPending, (state) => {
             state.loading = true
         });
 
         builder.addMatcher(chuckApi.endpoints.getRandomJokes.matchFulfilled, (state, { payload }) => {
-            state.loading = false;
             state.jokes = [payload]
         }).addMatcher(chuckApi.endpoints.getJokesByCategory.matchFulfilled, (state, { payload }) => {
             state.loading = false;
@@ -48,11 +45,9 @@ export const chuckSlice = createSlice({
             state.jokes = payload.result
         });
 
-        builder.addMatcher(chuckApi.endpoints.getRandomJokes.matchRejected, (state, action) => {
+        builder.addMatcher(chuckApi.endpoints.getJokesByCategory.matchRejected, (state) => {
             state.loading = false
-        }).addMatcher(chuckApi.endpoints.getJokesByCategory.matchRejected, (state, action) => {
-            state.loading = false
-        }).addMatcher(chuckApi.endpoints.getSearchJokes.matchRejected, (state, action) => {
+        }).addMatcher(chuckApi.endpoints.getSearchJokes.matchRejected, (state) => {
             state.loading = false
         });
     },
